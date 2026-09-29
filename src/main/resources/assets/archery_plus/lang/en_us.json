@@ -1,0 +1,16 @@
+{
+  "itemGroup.archery_plus": "Archery Plus",
+  "item.archery_plus.recurve_bow": "Recurve Bow",
+  "item.archery_plus.longbow": "Longbow",
+  "item.archery_plus.iron_quiver": "Iron Quiver",
+  "container.archery_plus.quiver": "Quiver",
+  "key.category.archery_plus.controls": "Archery Plus",
+  "key.archery_plus.open_quiver": "Open quiver",
+  "key.archery_plus.select_arrow": "Hold to select arrow",
+  "message.archery_plus.no_quiver": "Equip a quiver first.",
+  "message.archery_plus.no_ammo": "The selected quiver compartment is empty.",
+  "gui.archery_plus.empty": "Empty",
+  "gui.archery_plus.slot": "Quiver slot",
+  "gui.archery_plus.selected": "Selected",
+  "gui.archery_plus.wheel": "Release to select; center cancels"
+}

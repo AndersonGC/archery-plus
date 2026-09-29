@@ -1,0 +1,16 @@
+{
+  "itemGroup.archery_plus": "Archery Plus",
+  "item.archery_plus.recurve_bow": "Arco recurvo",
+  "item.archery_plus.longbow": "Arco longo",
+  "item.archery_plus.iron_quiver": "Aljava de ferro",
+  "container.archery_plus.quiver": "Aljava",
+  "key.category.archery_plus.controls": "Archery Plus",
+  "key.archery_plus.open_quiver": "Abrir aljava",
+  "key.archery_plus.select_arrow": "Segurar para selecionar flecha",
+  "message.archery_plus.no_quiver": "Equipe uma aljava primeiro.",
+  "message.archery_plus.no_ammo": "O compartimento selecionado está vazio.",
+  "gui.archery_plus.empty": "Vazio",
+  "gui.archery_plus.slot": "Slot da aljava",
+  "gui.archery_plus.selected": "Selecionado",
+  "gui.archery_plus.wheel": "Solte para selecionar; centro cancela"
+}
