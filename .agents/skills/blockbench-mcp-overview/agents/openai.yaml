@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Mcp Overview"
+  short_description: "Blockbench: Mcp Overview workflows"
+  default_prompt: "Use $blockbench-mcp-overview for my Blockbench task: "

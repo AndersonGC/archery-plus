@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Hytale"
+  short_description: "Blockbench: Hytale workflows"
+  default_prompt: "Use $blockbench-hytale for my Blockbench task: "

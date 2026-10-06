@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -93,6 +92,7 @@ public final class ArcheryControls {
                 mc.player.stopUsingItem();
                 request(QuiverRequest.WHEEL, -1);
                 wheel = true;
+                ArrowWheelRenderer.reset();
                 mc.mouseHandler.releaseMouse();
             } else request(QuiverRequest.WHEEL, -1);
         }
@@ -104,7 +104,7 @@ public final class ArcheryControls {
         var window = mc.getWindow();
         double x = mc.mouseHandler.xpos() * window.getGuiScaledWidth() / window.getScreenWidth() - window.getGuiScaledWidth() / 2.0;
         double y = mc.mouseHandler.ypos() * window.getGuiScaledHeight() / window.getScreenHeight() - window.getGuiScaledHeight() / 2.0;
-        return WheelMath.sector(x, y);
+        return WheelMath.sector(x, y, ArrowWheelRenderer.INNER_RADIUS * ArrowWheelRenderer.scale(window.getGuiScaledWidth(), window.getGuiScaledHeight()));
     }
 
     private static void close(boolean confirm) {
@@ -147,38 +147,6 @@ public final class ArcheryControls {
     private static void renderWheel(GuiGraphicsExtractor graphics) {
         Minecraft mc = Minecraft.getInstance();
         if (!wheel || mc.player == null || mc.screen != null || !mc.isWindowActive()) return;
-        var contents = QuiverEquipment.get(mc.player).contents();
-        int cx = graphics.guiWidth() / 2, cy = graphics.guiHeight() / 2, radius = 72;
-        int pointed = pointed(mc);
-        for (int y = -radius; y <= radius; y++) {
-            int last = -2, start = -radius;
-            for (int x = -radius; x <= radius + 1; x++) {
-                int sector = x * x + y * y <= radius * radius ? WheelMath.sector(x, y) : -1;
-                if (sector != last) {
-                    if (last >= 0) graphics.fill(cx + start, cy + y, cx + x, cy + y + 1,
-                            last == pointed ? 0xDDA77F3F : last == contents.selected() ? 0xDD446B50 : 0xDD282A30);
-                    start = x; last = sector;
-                }
-            }
-        }
-        int[] dx = {0, 47, 0, -47}, dy = {-47, 0, 47, 0};
-        for (int i = 0; i < 4; i++) {
-            var stack = contents.get(i);
-            int x = cx + dx[i], y = cy + dy[i];
-            if (!stack.isEmpty()) graphics.item(stack, x - 8, y - 12);
-            graphics.text(mc.font, (i + 1) + ": " + stack.getCount(), x - 12, y + 7, 0xFFFFFFFF);
-            if (contents.selected() == i) graphics.text(mc.font, "*", x + 12, y - 13, 0xFFFFFF80);
-        }
-        if (pointed >= 0) {
-            var stack = contents.get(pointed);
-            Component name = stack.isEmpty() ? Component.translatable("gui.archery_plus.empty") : stack.getHoverName();
-            graphics.text(mc.font, name, cx - mc.font.width(name) / 2, cy + 80, 0xFFFFFFFF);
-        }
-        Component hint = Component.translatable("gui.archery_plus.wheel");
-        graphics.text(mc.font, hint, cx - mc.font.width(hint) / 2, cy - 88, 0xFFFFFFFF);
-        var confirmed = contents.get(contents.selected());
-        Component selection = Component.translatable("gui.archery_plus.selected").append(": ")
-                .append(confirmed.isEmpty() ? Component.translatable("gui.archery_plus.empty") : confirmed.getHoverName());
-        graphics.text(mc.font, selection, cx - mc.font.width(selection) / 2, cy + 94, 0xFFB4E0B9);
+        ArrowWheelRenderer.render(graphics, QuiverEquipment.get(mc.player).contents(), pointed(mc));
     }
 }

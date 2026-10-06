@@ -43,6 +43,13 @@ public final class QuiverContents {
     }
 
     public int selected() { return selected; }
+    public int totalArrows() { return slots.stream().mapToInt(ItemStack::getCount).sum(); }
+    public int totalCapacity() { return SIZE * CAPACITY; }
+    /** Cosmetic arrows never enter the world or participate in ammunition consumption. */
+    public int visibleArrows() {
+        int total = totalArrows();
+        return total == 0 ? 0 : total * 10 > totalCapacity() * 9 ? 8 : 4;
+    }
     public ItemStack get(int index) { return slots.get(index).copy(); }
     public List<ItemStack> stacks() { return slots.stream().map(ItemStack::copy).toList(); }
 

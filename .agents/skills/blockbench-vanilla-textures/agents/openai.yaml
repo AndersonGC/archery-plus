@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Vanilla Textures"
+  short_description: "Blockbench: Vanilla Textures workflows"
+  default_prompt: "Use $blockbench-vanilla-textures for my Blockbench task: "

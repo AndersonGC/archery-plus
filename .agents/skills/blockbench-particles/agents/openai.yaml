@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Particles"
+  short_description: "Blockbench: Particles workflows"
+  default_prompt: "Use $blockbench-particles for my Blockbench task: "

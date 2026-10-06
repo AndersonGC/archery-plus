@@ -12,5 +12,14 @@
   "gui.archery_plus.empty": "Empty",
   "gui.archery_plus.slot": "Quiver slot",
   "gui.archery_plus.selected": "Selected",
-  "gui.archery_plus.wheel": "Release to select; center cancels"
+  "gui.archery_plus.wheel": "Release to select; center cancels",
+  "gui.archery_plus.wheel_confirm": "Move to choose • Center cancels",
+  "item.archery_plus.gold_quiver": "Gold Quiver",
+  "gui.archery_plus.wheel_unavailable": "Empty compartment • Center cancels",
+  "item.archery_plus.leather_quiver": "Leather Quiver",
+  "item.archery_plus.diamond_quiver": "Diamond Quiver",
+  "gui.archery_plus.wheel_cancel": "Center cancels",
+  "gui.archery_plus.wheel_release": "Release %s to select",
+  "gui.archery_plus.preview": "Choose",
+  "item.archery_plus.netherite_quiver": "Netherite Quiver"
 }

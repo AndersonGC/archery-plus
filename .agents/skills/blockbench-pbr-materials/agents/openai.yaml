@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Pbr Materials"
+  short_description: "Blockbench: Pbr Materials workflows"
+  default_prompt: "Use $blockbench-pbr-materials for my Blockbench task: "

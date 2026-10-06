@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Gpt Image Textures"
+  short_description: "Blockbench: Gpt Image Textures workflows"
+  default_prompt: "Use $blockbench-gpt-image-textures for my Blockbench task: "

@@ -10,6 +10,8 @@ import com.archeryplus.network.InventoryAction;
 import com.archeryplus.network.QuiverRequest;
 import com.archeryplus.quiver.QuiverContents;
 import com.archeryplus.quiver.QuiverEquipment;
+import com.archeryplus.quiver.QuiverAppearance;
+import com.archeryplus.item.QuiverItem;
 import com.archeryplus.registry.ModRegistries;
 import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
@@ -70,6 +72,8 @@ public final class ArcheryGameTests {
         test("selection_and_cancel", ArcheryGameTests::selection);
         test("controls_math", ArcheryGameTests::controls);
         test("recipes_and_enchantability", ArcheryGameTests::recipes);
+        test("quiver_materials_and_upgrades", ArcheryGameTests::quiverMaterials);
+        test("quiver_appearance", ArcheryGameTests::quiverAppearance);
         test("creative_inventory_transactions", ArcheryGameTests::creativeInventory);
         test("drag_and_potion_transfers", ArcheryGameTests::drag);
         test("effects_and_enchantments", ArcheryGameTests::effects);
@@ -320,6 +324,10 @@ public final class ArcheryGameTests {
         helper.assertTrue(WheelMath.sector(0, 0) == -1 && WheelMath.sector(12, 0) == -1, "neutral radius");
         helper.assertTrue(WheelMath.sector(0, -20) == 0 && WheelMath.sector(20, 0) == 1
                 && WheelMath.sector(0, 20) == 2 && WheelMath.sector(-20, 0) == 3, "four fixed directions");
+        helper.assertTrue(WheelMath.sector(40, 0, 44) == -1 && WheelMath.sector(45, 0, 44) == 1,
+                "rendered hub is neutral, and its edge selects the adjacent sector");
+        helper.assertTrue(WheelMath.sector(20, 0, 22) == -1 && WheelMath.sector(23, 0, 22) == 1,
+                "neutral hub follows GUI scaling");
         var zoom = new ZoomTransition();
         zoom.value(true, 1_000_000_000L);
         helper.assertTrue(Math.abs(zoom.value(true, 1_150_000_000L) - 0.75F) < 0.001F, "150ms zoom in");
@@ -390,6 +398,72 @@ public final class ArcheryGameTests {
             }
             helper.assertTrue(stack.get(DataComponents.REPAIRABLE).isValidRepairItem(new ItemStack(Items.OAK_PLANKS)), "repair by planks");
         }
+        helper.succeed();
+    }
+
+    private static void quiverMaterials(GameTestHelper helper) {
+        var player = player(helper);
+        Item[] tiers = {ModRegistries.LEATHER_QUIVER.get(), ModRegistries.IRON_QUIVER.get(), ModRegistries.GOLD_QUIVER.get(),
+                ModRegistries.DIAMOND_QUIVER.get(), ModRegistries.NETHERITE_QUIVER.get()};
+        Item[] materials = {Items.IRON_INGOT, Items.GOLD_INGOT, Items.DIAMOND, Items.NETHERITE_INGOT};
+        var contents = new QuiverContents(List.of(new ItemStack(Items.ARROW, 64), new ItemStack(Items.SPECTRAL_ARROW, 23),
+                potion(), ItemStack.EMPTY), 2);
+        var stack = new ItemStack(tiers[0]);
+        stack.set(ModRegistries.QUIVER_CONTENTS, contents);
+        stack.set(DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("Archer's keepsake"));
+        var manager = helper.getLevel().getServer().getRecipeManager();
+        for (int tier = 0; tier < tiers.length; tier++) {
+            helper.assertTrue(stack.is(tiers[tier]) && ((QuiverItem) stack.getItem()).material().ordinal() == tier, "correct material " + tier);
+            player.inventoryMenu.getSlot(9).set(stack.copy());
+            player.inventoryMenu.quickMoveStack(player, 9);
+            var equipment = QuiverEquipment.get(player);
+            helper.assertTrue(equipment.equipped() && equipment.stack().is(tiers[tier]) && equipment.contents().equals(contents), "shift equip tier " + tier);
+            helper.assertTrue(player.getData(ModRegistries.APPEARANCE).material() == tier, "public appearance updated " + tier);
+            equipment.equip(player, ItemStack.EMPTY);
+            if (tier < materials.length) {
+                CraftingInput input = CraftingInput.of(2, 1, List.of(stack, new ItemStack(materials[tier])));
+                var recipe = manager.getRecipeFor(RecipeType.CRAFTING, input, helper.getLevel()).orElseThrow();
+                stack = recipe.value().assemble(input);
+                helper.assertTrue(stack.getCount() == 1 && contents.equals(stack.get(ModRegistries.QUIVER_CONTENTS)), "upgrade preserves arrows and selection");
+                helper.assertTrue(stack.getHoverName().getString().equals("Archer's keepsake"), "upgrade preserves custom name");
+            }
+        }
+        var ops = RegistryOps.create(JsonOps.INSTANCE, helper.getLevel().registryAccess());
+        var saved = new QuiverEquipment(stack, 3);
+        var loaded = QuiverEquipment.CODEC.codec().parse(ops, QuiverEquipment.CODEC.codec().encodeStart(ops, saved).getOrThrow()).getOrThrow();
+        helper.assertTrue(loaded.stack().is(tiers[4]) && loaded.contents().equals(contents), "new materials survive serialization");
+        helper.succeed();
+    }
+
+    private static void quiverAppearance(GameTestHelper helper) {
+        var player = player(helper);
+        var equipment = QuiverEquipment.get(player);
+        equipment.equip(player, new ItemStack(ModRegistries.GOLD_QUIVER.get()));
+        int[] totals = {0, 1, 64, 128, 230, 231, 256};
+        int[] visible = {0, 4, 4, 4, 4, 8, 8};
+        for (int n = 0; n < totals.length; n++) {
+            List<ItemStack> slots = new ArrayList<>();
+            int remaining = totals[n];
+            for (int i = 0; i < QuiverContents.SIZE; i++) {
+                int count = Math.min(64, remaining);
+                slots.add(count == 0 ? ItemStack.EMPTY : new ItemStack(i % 2 == 0 ? Items.ARROW : Items.SPECTRAL_ARROW, count));
+                remaining -= count;
+            }
+            equipment.contents(player, new QuiverContents(slots, 0));
+            var appearance = player.getData(ModRegistries.APPEARANCE);
+            helper.assertTrue(appearance.arrows() == visible[n], "occupancy appearance at " + totals[n] + " / 256");
+        }
+        equipment.contents(player, new QuiverContents(List.of(new ItemStack(Items.ARROW, 64), new ItemStack(Items.ARROW, 64),
+                new ItemStack(Items.ARROW, 64), new ItemStack(Items.ARROW, 39)), 3));
+        helper.assertTrue(player.getData(ModRegistries.APPEARANCE).arrows() == 8, "over 90 percent is full");
+        fire(player, new ItemStack(Items.BOW), 20);
+        helper.assertTrue(equipment.contents().totalArrows() == 230 && player.getData(ModRegistries.APPEARANCE).arrows() == 4,
+                "shooting updates the appearance when crossing 90 percent");
+        equipment.contents(player, QuiverContents.EMPTY.with(3, new ItemStack(Items.ARROW, 64)));
+        helper.assertTrue(player.getData(ModRegistries.APPEARANCE).arrows() == 4 && equipment.contents().get(0).isEmpty(),
+                "occupancy counts all compartments, including unselected ones");
+        equipment.equip(player, ItemStack.EMPTY);
+        helper.assertTrue(player.getData(ModRegistries.APPEARANCE).equals(QuiverAppearance.NONE), "unequipping removes the back model");
         helper.succeed();
     }
 

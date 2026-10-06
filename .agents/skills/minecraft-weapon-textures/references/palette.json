@@ -1,0 +1,581 @@
+{
+  "schema_version": 1,
+  "source_root": "D:\\Workspace\\archery-plus\\docs\\inspirations",
+  "semantics": "Materiais atribuídos por inspeção visual; RGB e coordenadas medidos. Contagens são por cor em todo o arquivo, não segmentação exclusiva do material.",
+  "ramps": {
+    "wood_shaft": {
+      "material": "Madeira da haste",
+      "source": "iron_spear.png",
+      "colors": [
+        "#281E0B",
+        "#493615",
+        "#684E1E",
+        "#896727"
+      ],
+      "samples": [
+        {
+          "hex": "#281E0B",
+          "sample_xy": [
+            24,
+            8
+          ],
+          "pixels_in_source": 22,
+          "luma_srgb": 30.754
+        },
+        {
+          "hex": "#493615",
+          "sample_xy": [
+            23,
+            7
+          ],
+          "pixels_in_source": 23,
+          "luma_srgb": 55.657
+        },
+        {
+          "hex": "#684E1E",
+          "sample_xy": [
+            22,
+            9
+          ],
+          "pixels_in_source": 10,
+          "luma_srgb": 80.062
+        },
+        {
+          "hex": "#896727",
+          "sample_xy": [
+            23,
+            8
+          ],
+          "pixels_in_source": 11,
+          "luma_srgb": 105.608
+        }
+      ]
+    },
+    "wood_composite": {
+      "material": "Madeira do arco composto",
+      "source": "composite_longbow.png",
+      "colors": [
+        "#1F1206",
+        "#493615",
+        "#684E1E"
+      ],
+      "samples": [
+        {
+          "hex": "#1F1206",
+          "sample_xy": [
+            24,
+            8
+          ],
+          "pixels_in_source": 18,
+          "luma_srgb": 19.897
+        },
+        {
+          "hex": "#493615",
+          "sample_xy": [
+            17,
+            9
+          ],
+          "pixels_in_source": 16,
+          "luma_srgb": 55.657
+        },
+        {
+          "hex": "#684E1E",
+          "sample_xy": [
+            17,
+            10
+          ],
+          "pixels_in_source": 8,
+          "luma_srgb": 80.062
+        }
+      ]
+    },
+    "wood_red": {
+      "material": "Madeira avermelhada",
+      "source": "heavy_crossbow_standby.png",
+      "colors": [
+        "#1F1206",
+        "#3D2B23",
+        "#54271F",
+        "#6E392D",
+        "#8C4D40"
+      ],
+      "samples": [
+        {
+          "hex": "#1F1206",
+          "sample_xy": [
+            23,
+            8
+          ],
+          "pixels_in_source": 35,
+          "luma_srgb": 19.897
+        },
+        {
+          "hex": "#3D2B23",
+          "sample_xy": [
+            21,
+            10
+          ],
+          "pixels_in_source": 12,
+          "luma_srgb": 46.249
+        },
+        {
+          "hex": "#54271F",
+          "sample_xy": [
+            19,
+            9
+          ],
+          "pixels_in_source": 13,
+          "luma_srgb": 47.989
+        },
+        {
+          "hex": "#6E392D",
+          "sample_xy": [
+            16,
+            10
+          ],
+          "pixels_in_source": 17,
+          "luma_srgb": 67.401
+        },
+        {
+          "hex": "#8C4D40",
+          "sample_xy": [
+            19,
+            10
+          ],
+          "pixels_in_source": 16,
+          "luma_srgb": 89.455
+        }
+      ]
+    },
+    "metal_neutral": {
+      "material": "Metal neutro",
+      "source": "iron_spear.png",
+      "colors": [
+        "#181818",
+        "#444444",
+        "#6B6B6B",
+        "#969696",
+        "#D8D8D8",
+        "#FFFFFF"
+      ],
+      "samples": [
+        {
+          "hex": "#181818",
+          "sample_xy": [
+            28,
+            5
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 24.0
+        },
+        {
+          "hex": "#444444",
+          "sample_xy": [
+            29,
+            3
+          ],
+          "pixels_in_source": 6,
+          "luma_srgb": 68.0
+        },
+        {
+          "hex": "#6B6B6B",
+          "sample_xy": [
+            27,
+            2
+          ],
+          "pixels_in_source": 7,
+          "luma_srgb": 107.0
+        },
+        {
+          "hex": "#969696",
+          "sample_xy": [
+            27,
+            4
+          ],
+          "pixels_in_source": 3,
+          "luma_srgb": 150.0
+        },
+        {
+          "hex": "#D8D8D8",
+          "sample_xy": [
+            25,
+            5
+          ],
+          "pixels_in_source": 2,
+          "luma_srgb": 216.0
+        },
+        {
+          "hex": "#FFFFFF",
+          "sample_xy": [
+            27,
+            3
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 255.0
+        }
+      ]
+    },
+    "metal_cool": {
+      "material": "Metal frio",
+      "source": "heavy_crossbow_standby.png",
+      "colors": [
+        "#3F4149",
+        "#5A5F6A",
+        "#93979D",
+        "#CCD4D7"
+      ],
+      "samples": [
+        {
+          "hex": "#3F4149",
+          "sample_xy": [
+            22,
+            7
+          ],
+          "pixels_in_source": 25,
+          "luma_srgb": 65.152
+        },
+        {
+          "hex": "#5A5F6A",
+          "sample_xy": [
+            22,
+            9
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 94.731
+        },
+        {
+          "hex": "#93979D",
+          "sample_xy": [
+            22,
+            8
+          ],
+          "pixels_in_source": 10,
+          "luma_srgb": 150.583
+        },
+        {
+          "hex": "#CCD4D7",
+          "sample_xy": [
+            21,
+            9
+          ],
+          "pixels_in_source": 5,
+          "luma_srgb": 210.516
+        }
+      ]
+    },
+    "leather": {
+      "material": "Couro marrom",
+      "source": "small_quiver.png",
+      "colors": [
+        "#1C1616",
+        "#312018",
+        "#41291F",
+        "#55362A",
+        "#6E4738"
+      ],
+      "samples": [
+        {
+          "hex": "#1C1616",
+          "sample_xy": [
+            11,
+            6
+          ],
+          "pixels_in_source": 15,
+          "luma_srgb": 23.276
+        },
+        {
+          "hex": "#312018",
+          "sample_xy": [
+            10,
+            3
+          ],
+          "pixels_in_source": 12,
+          "luma_srgb": 35.037
+        },
+        {
+          "hex": "#41291F",
+          "sample_xy": [
+            11,
+            5
+          ],
+          "pixels_in_source": 11,
+          "luma_srgb": 45.38
+        },
+        {
+          "hex": "#55362A",
+          "sample_xy": [
+            10,
+            4
+          ],
+          "pixels_in_source": 17,
+          "luma_srgb": 59.724
+        },
+        {
+          "hex": "#6E4738",
+          "sample_xy": [
+            9,
+            5
+          ],
+          "pixels_in_source": 13,
+          "luma_srgb": 78.208
+        }
+      ]
+    },
+    "string_gray": {
+      "material": "Corda cinza básica",
+      "source": "composite_longbow.png",
+      "colors": [
+        "#444444"
+      ],
+      "samples": [
+        {
+          "hex": "#444444",
+          "sample_xy": [
+            23,
+            11
+          ],
+          "pixels_in_source": 13,
+          "luma_srgb": 68.0
+        }
+      ]
+    },
+    "string_loaded": {
+      "material": "Corda cinza tensionada",
+      "source": "heavy_crossbow_arrow.png",
+      "colors": [
+        "#6D6D6D"
+      ],
+      "samples": [
+        {
+          "hex": "#6D6D6D",
+          "sample_xy": [
+            11,
+            9
+          ],
+          "pixels_in_source": 16,
+          "luma_srgb": 109.0
+        }
+      ]
+    },
+    "string_light": {
+      "material": "Corda clara",
+      "source": "unique_longbow_1.png",
+      "colors": [
+        "#A17562",
+        "#C0B493",
+        "#ECE7C9"
+      ],
+      "samples": [
+        {
+          "hex": "#A17562",
+          "sample_xy": [
+            25,
+            8
+          ],
+          "pixels_in_source": 6,
+          "luma_srgb": 124.983
+        },
+        {
+          "hex": "#C0B493",
+          "sample_xy": [
+            22,
+            11
+          ],
+          "pixels_in_source": 6,
+          "luma_srgb": 180.169
+        },
+        {
+          "hex": "#ECE7C9",
+          "sample_xy": [
+            19,
+            14
+          ],
+          "pixels_in_source": 6,
+          "luma_srgb": 229.897
+        }
+      ]
+    },
+    "feather": {
+      "material": "Penas da aljava",
+      "source": "small_quiver_filled.png",
+      "colors": [
+        "#293133",
+        "#A9A9A9",
+        "#DEDEDE"
+      ],
+      "samples": [
+        {
+          "hex": "#293133",
+          "sample_xy": [
+            10,
+            4
+          ],
+          "pixels_in_source": 3,
+          "luma_srgb": 47.444
+        },
+        {
+          "hex": "#A9A9A9",
+          "sample_xy": [
+            12,
+            3
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 169.0
+        },
+        {
+          "hex": "#DEDEDE",
+          "sample_xy": [
+            12,
+            2
+          ],
+          "pixels_in_source": 6,
+          "luma_srgb": 222.0
+        }
+      ]
+    },
+    "crystal": {
+      "material": "Cristal violeta/azul",
+      "source": "crystal_shortbow.png",
+      "colors": [
+        "#7200A2",
+        "#2E1889",
+        "#4267B9",
+        "#8D91EF",
+        "#BBEBFC"
+      ],
+      "samples": [
+        {
+          "hex": "#7200A2",
+          "sample_xy": [
+            8,
+            0
+          ],
+          "pixels_in_source": 12,
+          "luma_srgb": 35.933
+        },
+        {
+          "hex": "#2E1889",
+          "sample_xy": [
+            9,
+            0
+          ],
+          "pixels_in_source": 18,
+          "luma_srgb": 36.836
+        },
+        {
+          "hex": "#4267B9",
+          "sample_xy": [
+            12,
+            2
+          ],
+          "pixels_in_source": 8,
+          "luma_srgb": 101.054
+        },
+        {
+          "hex": "#8D91EF",
+          "sample_xy": [
+            13,
+            1
+          ],
+          "pixels_in_source": 10,
+          "luma_srgb": 150.936
+        },
+        {
+          "hex": "#BBEBFC",
+          "sample_xy": [
+            9,
+            1
+          ],
+          "pixels_in_source": 8,
+          "luma_srgb": 226.023
+        }
+      ]
+    },
+    "string_teal": {
+      "material": "Corda turquesa",
+      "source": "crystal_shortbow.png",
+      "colors": [
+        "#2E857D",
+        "#5AB2AA",
+        "#A7E8E2"
+      ],
+      "samples": [
+        {
+          "hex": "#2E857D",
+          "sample_xy": [
+            14,
+            3
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 113.926
+        },
+        {
+          "hex": "#5AB2AA",
+          "sample_xy": [
+            12,
+            5
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 158.714
+        },
+        {
+          "hex": "#A7E8E2",
+          "sample_xy": [
+            10,
+            7
+          ],
+          "pixels_in_source": 4,
+          "luma_srgb": 217.748
+        }
+      ]
+    }
+  },
+  "generation": {
+    "wood": {
+      "colors": [
+        "#281E0B",
+        "#493615",
+        "#684E1E",
+        "#896727"
+      ],
+      "source_ramp": "wood_shaft"
+    },
+    "metal": {
+      "colors": [
+        "#181818",
+        "#444444",
+        "#6B6B6B",
+        "#969696",
+        "#D8D8D8",
+        "#FFFFFF"
+      ],
+      "source_ramp": "metal_neutral"
+    },
+    "leather": {
+      "colors": [
+        "#1C1616",
+        "#312018",
+        "#41291F",
+        "#55362A",
+        "#6E4738"
+      ],
+      "source_ramp": "leather"
+    },
+    "string": {
+      "colors": [
+        "#A17562",
+        "#C0B493",
+        "#ECE7C9"
+      ],
+      "source_ramp": "string_light"
+    },
+    "feather": {
+      "colors": [
+        "#293133",
+        "#A9A9A9",
+        "#DEDEDE"
+      ],
+      "source_ramp": "feather"
+    }
+  }
+}

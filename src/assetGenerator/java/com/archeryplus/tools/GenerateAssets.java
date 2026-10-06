@@ -1,35 +1,31 @@
 package com.archeryplus.tools;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import javax.imageio.ImageIO;
 import java.io.DataOutputStream;
 import java.util.zip.GZIPOutputStream;
 
 public final class GenerateAssets {
+    private static final String[] MATERIALS = {"leather", "iron", "gold", "diamond", "netherite"};
     private static Path root;
 
     public static void main(String[] args) throws Exception {
         root = Path.of(args[0]);
         emptyStructure();
-        bow("recurve_bow", 15, 0xBA8952);
-        bow("longbow", 30, 0x785136);
-        model("iron_quiver", false);
-        write("assets/archery_plus/items/iron_quiver.json", "{\"model\":" + modelReference("iron_quiver") + "}");
-        BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        g.setColor(new Color(0x493126)); g.fillRect(10, 7, 13, 23);
-        g.setColor(new Color(0x92613E)); g.fillRect(12, 8, 9, 20);
-        g.setColor(new Color(0xB4BBC4)); g.fillRect(9, 7, 15, 4); g.fillRect(10, 24, 13, 3);
-        g.setColor(new Color(0xDBCA91)); g.fillRect(13, 1, 2, 12); g.fillRect(18, 2, 2, 10);
-        g.setColor(new Color(0xE8E6D5)); g.fillRect(12, 1, 4, 3); g.fillRect(17, 2, 4, 3);
-        g.dispose(); texture("iron_quiver", image);
+        bow("recurve_bow", 15);
+        bow("longbow", 30);
+        for (String material : MATERIALS) {
+            model(material + "_quiver", false);
+            write("assets/archery_plus/items/" + material + "_quiver.json", "{\"model\":" + modelReference(material + "_quiver") + "}");
+        }
         recipe("recurve_bow", "[\" TS\",\"L S\",\" TS\"]", "\"T\":\"minecraft:stick\",\"L\":\"minecraft:leather\",\"S\":\"minecraft:string\"");
         recipe("longbow", "[\"TPS\",\"T S\",\"TPS\"]", "\"T\":\"minecraft:stick\",\"P\":\"#minecraft:planks\",\"S\":\"minecraft:string\"");
         recipe("iron_quiver", "[\"LIL\",\"L L\",\" L \"]", "\"L\":\"minecraft:leather\",\"I\":\"minecraft:iron_ingot\"");
+        recipe("leather_quiver", "[\"LSL\",\"L L\",\" L \"]", "\"L\":\"minecraft:leather\",\"S\":\"minecraft:string\"");
+        upgrade("leather", "iron", "iron_ingot");
+        upgrade("iron", "gold", "gold_ingot");
+        upgrade("gold", "diamond", "diamond");
+        upgrade("diamond", "netherite", "netherite_ingot");
         for (String tag : new String[]{"bow", "durability"}) {
             write("data/minecraft/tags/item/enchantable/" + tag + ".json", """
                     {"replace":false,"values":["archery_plus:recurve_bow","archery_plus:longbow"]}
@@ -37,25 +33,10 @@ public final class GenerateAssets {
         }
     }
 
-    private static void bow(String name, int ticks, int color) throws Exception {
+    private static void bow(String name, int ticks) throws Exception {
         for (int stage = -1; stage < 3; stage++) {
             String id = name + (stage < 0 ? "" : "_pulling_" + stage);
             model(id, true);
-            BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = image.createGraphics();
-            int mid = 10 - Math.max(0, stage);
-            g.setColor(new Color(0x352720));
-            g.drawPolyline(new int[]{21, 17, mid, mid, 17, 21}, new int[]{2, 5, 12, 19, 26, 29}, 6);
-            g.setColor(new Color(color));
-            g.drawPolyline(new int[]{22, 18, mid + 1, mid + 1, 18, 22}, new int[]{2, 5, 12, 19, 26, 29}, 6);
-            g.setColor(new Color(0xD0B68A));
-            g.drawPolyline(new int[]{22, 22 + Math.max(0, stage) * 2, 22}, new int[]{2, 16, 29}, 3);
-            g.setColor(new Color(0x4B3930)); g.fillRect(mid, 13, 3, 6);
-            if (stage >= 0) {
-                g.setColor(new Color(0xD9C29B)); g.drawLine(5, 16, 26, 16);
-                g.setColor(new Color(0xC6CED8)); g.fillRect(3, 15, 4, 3);
-            }
-            g.dispose(); texture(id, image);
         }
         write("assets/archery_plus/items/" + name + ".json", """
                 {"model":{"type":"minecraft:condition","property":"minecraft:using_item",
@@ -70,15 +51,27 @@ public final class GenerateAssets {
     }
 
     private static void model(String name, boolean bow) throws Exception {
+        boolean longbow = name.startsWith("longbow");
+        String firstScale = longbow ? "0.92,0.92,0.92" : "0.68,0.68,0.68";
+        String thirdScale = longbow ? "1.2,1.2,1.2" : "0.85,0.85,0.85";
         String display = bow ? """
                 ,"display":{
-                  "firstperson_righthand":{"rotation":[0,-90,25],"translation":[1.1,3.2,1.1],"scale":[0.68,0.68,0.68]},
-                  "firstperson_lefthand":{"rotation":[0,90,-25],"translation":[1.1,3.2,1.1],"scale":[0.68,0.68,0.68]},
-                  "thirdperson_righthand":{"rotation":[-80,260,-40],"translation":[-1,-2,2.5],"scale":[0.9,0.9,0.9]},
-                  "thirdperson_lefthand":{"rotation":[-80,-280,40],"translation":[-1,-2,2.5],"scale":[0.9,0.9,0.9]}}
-                """ : "";
+                  "firstperson_righthand":{"rotation":[0,-90,25],"translation":[1.1,3.2,1.1],"scale":[%s]},
+                  "firstperson_lefthand":{"rotation":[0,90,-25],"translation":[1.1,3.2,1.1],"scale":[%s]},
+                  "thirdperson_righthand":{"rotation":[-80,260,-40],"translation":[-1,-2,2.5],"scale":[%s]},
+                  "thirdperson_lefthand":{"rotation":[-80,-280,40],"translation":[-1,-2,2.5],"scale":[%s]}}
+                """.formatted(firstScale, firstScale, thirdScale, thirdScale) : "";
         write("assets/archery_plus/models/item/" + name + ".json",
                 "{\"parent\":\"minecraft:item/generated\",\"textures\":{\"layer0\":\"archery_plus:item/" + name + "\"}" + display + "}");
+    }
+
+    private static void upgrade(String from, String to, String material) throws Exception {
+        // Vanilla transmutation copies the source component patch, including arrows and custom names.
+        write("data/archery_plus/recipe/" + to + "_quiver_upgrade.json", """
+                {"type":"minecraft:crafting_transmute","category":"equipment",
+                 "input":"archery_plus:%s_quiver","material":"minecraft:%s",
+                 "result":{"id":"archery_plus:%s_quiver","count":1}}
+                """.formatted(from, material, to));
     }
 
     private static void recipe(String name, String pattern, String keys) throws Exception {
@@ -96,12 +89,6 @@ public final class GenerateAssets {
         Path path = root.resolve(relative);
         Files.createDirectories(path.getParent());
         Files.writeString(path, text);
-    }
-
-    private static void texture(String name, BufferedImage image) throws Exception {
-        Path path = root.resolve("assets/archery_plus/textures/item/" + name + ".png");
-        Files.createDirectories(path.getParent());
-        ImageIO.write(image, "PNG", path.toFile());
     }
 
     private static void emptyStructure() throws Exception {

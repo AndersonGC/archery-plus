@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 public final class ArcheryPlusClient {
     public ArcheryPlusClient(IEventBus modEventBus) {
         ArcheryControls.register(modEventBus, NeoForge.EVENT_BUS);
+        BackQuiverLayer.register(modEventBus);
         modEventBus.addListener(this::onClientSetup);
     }
 

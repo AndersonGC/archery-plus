@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Development"
+  short_description: "Blockbench: Development workflows"
+  default_prompt: "Use $blockbench-development for my Blockbench task: "

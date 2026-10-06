@@ -1,0 +1,6 @@
+interface:
+  display_name: "Minecraft Weapon Textures"
+  short_description: "Texturas pixel art de armas para archery-plus"
+  default_prompt: "Use $minecraft-weapon-textures para criar uma textura de arma para archery-plus seguindo as referências do projeto."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Use"
+  short_description: "Blockbench: Use workflows"
+  default_prompt: "Use $blockbench-use for my Blockbench task: "

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench New Model"
+  short_description: "Blockbench: New Model workflows"
+  default_prompt: "Use $blockbench-new-model for my Blockbench task: "

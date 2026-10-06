@@ -12,5 +12,14 @@
   "gui.archery_plus.empty": "Vazio",
   "gui.archery_plus.slot": "Slot da aljava",
   "gui.archery_plus.selected": "Selecionado",
-  "gui.archery_plus.wheel": "Solte para selecionar; centro cancela"
+  "gui.archery_plus.wheel": "Solte para selecionar; centro cancela",
+  "gui.archery_plus.wheel_confirm": "Mover para escolher • Centro cancela",
+  "item.archery_plus.gold_quiver": "Aljava de ouro",
+  "gui.archery_plus.wheel_unavailable": "Compartimento vazio • Centro cancela",
+  "item.archery_plus.leather_quiver": "Aljava de couro",
+  "item.archery_plus.diamond_quiver": "Aljava de diamante",
+  "gui.archery_plus.wheel_cancel": "Centro cancela",
+  "gui.archery_plus.wheel_release": "Solte %s para selecionar",
+  "gui.archery_plus.preview": "Escolher",
+  "item.archery_plus.netherite_quiver": "Aljava de netherita"
 }

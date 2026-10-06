@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Animation"
+  short_description: "Blockbench: Animation workflows"
+  default_prompt: "Use $blockbench-animation for my Blockbench task: "

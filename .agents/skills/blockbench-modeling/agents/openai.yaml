@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Modeling"
+  short_description: "Blockbench: Modeling workflows"
+  default_prompt: "Use $blockbench-modeling for my Blockbench task: "

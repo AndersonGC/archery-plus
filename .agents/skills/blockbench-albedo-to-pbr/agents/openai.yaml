@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Albedo To Pbr"
+  short_description: "Blockbench: Albedo To Pbr workflows"
+  default_prompt: "Use $blockbench-albedo-to-pbr for my Blockbench task: "

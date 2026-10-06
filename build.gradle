@@ -52,6 +52,9 @@ def generateArcheryResources = tasks.register('generateArcheryResources', JavaEx
     args generatedArcheryResources.get().asFile.absolutePath
     inputs.files(sourceSets.assetGenerator.allSource)
     outputs.dir(generatedArcheryResources)
+    // This directory belongs exclusively to this task. Remove stale generated assets,
+    // including textures that are now authored PNGs in src/main/resources.
+    doFirst { delete(generatedArcheryResources) }
 }
 sourceSets.main.resources.srcDir(generateArcheryResources)
 

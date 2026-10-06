@@ -1,7 +1,7 @@
 package com.archeryplus.mixin;
 
 import com.archeryplus.quiver.EquipmentSlot;
-import com.archeryplus.registry.ModRegistries;
+import com.archeryplus.quiver.QuiverEquipment;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -34,7 +34,7 @@ public abstract class InventoryMenuMixin extends AbstractContainerMenu {
         if (!source.hasItem()) return;
         ItemStack stack = source.getItem();
         boolean outgoing = index == archeryPlus$slot;
-        if (!outgoing && (!stack.is(ModRegistries.IRON_QUIVER.get()) || slots.get(archeryPlus$slot).hasItem())) return;
+        if (!outgoing && (!QuiverEquipment.isQuiver(stack) || slots.get(archeryPlus$slot).hasItem())) return;
         ItemStack original = stack.copy();
         boolean moved = outgoing ? moveItemStackTo(stack, 9, 45, false)
                 : moveItemStackTo(stack, archeryPlus$slot, archeryPlus$slot + 1, false);

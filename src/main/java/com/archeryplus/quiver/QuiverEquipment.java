@@ -1,6 +1,7 @@
 package com.archeryplus.quiver;
 
 import com.archeryplus.registry.ModRegistries;
+import com.archeryplus.item.QuiverItem;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -24,7 +25,7 @@ public final class QuiverEquipment {
     public QuiverEquipment() { this(ItemStack.EMPTY, NEXT_REVISION.incrementAndGet()); }
 
     public QuiverEquipment(ItemStack stack, long revision) {
-        if (!stack.isEmpty() && (!stack.is(ModRegistries.IRON_QUIVER.get()) || stack.getCount() != 1)) {
+        if (!stack.isEmpty() && (!isQuiver(stack) || stack.getCount() != 1)) {
             throw new IllegalArgumentException("Invalid equipped quiver");
         }
         this.stack = stack.copy();
@@ -34,11 +35,12 @@ public final class QuiverEquipment {
     public static QuiverEquipment get(Player player) { return player.getData(ModRegistries.EQUIPMENT); }
     public ItemStack stack() { return stack; }
     public long revision() { return revision; }
-    public boolean equipped() { return !stack.isEmpty() && stack.is(ModRegistries.IRON_QUIVER.get()); }
+    public static boolean isQuiver(ItemStack stack) { return stack.getItem() instanceof QuiverItem; }
+    public boolean equipped() { return !stack.isEmpty() && isQuiver(stack); }
     public QuiverContents contents() { return stack.getOrDefault(ModRegistries.QUIVER_CONTENTS, QuiverContents.EMPTY); }
 
     public void equip(Player player, ItemStack value) {
-        if (!value.isEmpty() && (!value.is(ModRegistries.IRON_QUIVER.get()) || value.getCount() != 1)) return;
+        if (!value.isEmpty() && (!isQuiver(value) || value.getCount() != 1)) return;
         stack = value;
         renew(player);
     }
@@ -55,7 +57,11 @@ public final class QuiverEquipment {
     }
 
     public void changed(Player player) {
-        if (!player.level().isClientSide()) player.syncData(ModRegistries.EQUIPMENT);
+        if (!player.level().isClientSide()) {
+            player.syncData(ModRegistries.EQUIPMENT);
+            QuiverAppearance appearance = QuiverAppearance.of(this);
+            if (!appearance.equals(player.getData(ModRegistries.APPEARANCE))) player.setData(ModRegistries.APPEARANCE, appearance);
+        }
     }
 
     public boolean select(Player player, long expected, int index) {

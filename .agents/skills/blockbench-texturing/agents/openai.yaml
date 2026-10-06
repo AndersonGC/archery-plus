@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Texturing"
+  short_description: "Blockbench: Texturing workflows"
+  default_prompt: "Use $blockbench-texturing for my Blockbench task: "

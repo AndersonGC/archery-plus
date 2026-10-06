@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blockbench Substance"
+  short_description: "Blockbench: Substance workflows"
+  default_prompt: "Use $blockbench-substance for my Blockbench task: "

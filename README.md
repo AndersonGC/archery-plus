@@ -2,11 +2,13 @@
 
 Projeto de mod para expandir a arquearia no Minecraft com arcos, flechas e aljavas.
 
-**Estado atual:** MVP **0.1.0** implementado: recurvo, arco longo, aljava de ferro,
-slot de equipamento, menu por H, roda por R e zoom automático. O arco vanilla e
-os novos arcos usam somente a munição selecionada na aljava fora do criativo.
-As validações manuais de interface, controles e multiplayer estão pendentes com
-o usuário; consulte o roteiro e as evidências abaixo.
+**Estado atual:** **0.1.0** com arco recurvo, arco longo, arco vanilla e aljavas
+de couro, ferro, ouro, diamante e netherita. Texturas originais em pixel art,
+roda medieval com ampliação suave do setor apontado e modelo de aljava nas costas
+feito no Blockbench. O modelo acompanha o preenchimento da aljava equipada.
+Melhorias de material preservam flechas, seleção e nome personalizado.
+Inclui slot de equipamento, menu por H, roda por R e zoom automático.
+Os arcos usam a munição selecionada na aljava fora do criativo.
 
 ## Documentação
 
@@ -16,6 +18,8 @@ o usuário; consulte o roteiro e as evidências abaixo.
 - [Testes do MVP, medições e roteiro manual](docs/testes-mvp.md).
 - [Análise, lacunas e ideias](docs/analise.md).
 - [Inspirações visuais](docs/inspirations/README.md).
+- [Texturas, materiais e modelo nas costas](docs/visuais.md).
+- [Fontes das texturas, paletas e reprodução da arte](tools/textures/README.md).
 
 ## Ambiente
 
