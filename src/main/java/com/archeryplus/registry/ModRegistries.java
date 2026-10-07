@@ -1,6 +1,8 @@
 package com.archeryplus.registry;
 
 import com.archeryplus.ArcheryPlus;
+import com.archeryplus.block.ArcheryWorkbenchBlock;
+import com.mojang.serialization.MapCodec;
 import com.archeryplus.item.ArcheryBowItem;
 import com.archeryplus.item.BowStats;
 import com.archeryplus.item.QuiverItem;
@@ -19,13 +21,28 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModRegistries {
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ArcheryPlus.MODID);
+    public static final DeferredRegister<MapCodec<? extends Block>> BLOCK_TYPES =
+            DeferredRegister.create(Registries.BLOCK_TYPE, ArcheryPlus.MODID);
+    public static final DeferredHolder<MapCodec<? extends Block>, MapCodec<ArcheryWorkbenchBlock>> WORKBENCH_TYPE =
+            BLOCK_TYPES.register("archery_workbench", () -> ArcheryWorkbenchBlock.CODEC);
+    public static final DeferredBlock<ArcheryWorkbenchBlock> ARCHERY_WORKBENCH = BLOCKS.registerBlock("archery_workbench",
+            ArcheryWorkbenchBlock::new, p -> p.mapColor(MapColor.COLOR_BROWN).strength(2.5f).sound(SoundType.WOOD)
+                    .noOcclusion().pushReaction(PushReaction.BLOCK));
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ArcheryPlus.MODID);
+    public static final DeferredItem<BlockItem> ARCHERY_WORKBENCH_ITEM = ITEMS.registerSimpleBlockItem(ARCHERY_WORKBENCH);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ArcheryPlus.MODID);
     public static final DeferredRegister<DataComponentType<?>> COMPONENTS = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, ArcheryPlus.MODID);
@@ -58,6 +75,7 @@ public final class ModRegistries {
                         output.accept(GOLD_QUIVER.get());
                         output.accept(DIAMOND_QUIVER.get());
                         output.accept(NETHERITE_QUIVER.get());
+                        output.accept(ARCHERY_WORKBENCH_ITEM.get());
                     }).build());
 
     private static DeferredItem<ArcheryBowItem> bow(String name, BowStats stats) {
@@ -77,6 +95,8 @@ public final class ModRegistries {
     }
 
     public static void register(IEventBus modEventBus) {
+        BLOCK_TYPES.register(modEventBus);
+        BLOCKS.register(modEventBus);
         COMPONENTS.register(modEventBus);
         ATTACHMENTS.register(modEventBus);
         MENUS.register(modEventBus);

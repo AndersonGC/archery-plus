@@ -10,6 +10,12 @@ Melhorias de material preservam flechas, seleção e nome personalizado.
 Inclui slot de equipamento, menu por H, roda por R e zoom automático.
 Os arcos usam a munição selecionada na aljava fora do criativo.
 
+A bancada de arquearia está disponível como bloco decorativo de **2 × 2 × 1**,
+sem interface. Ela aparece na aba criativa **Archery Plus** ou pode ser obtida
+com `/give @s archery_plus:archery_workbench`. Deixe dois blocos livres no chão
+e dois acima; a frente fica voltada para o jogador. Quebrar qualquer parte
+remove a bancada inteira e devolve um item no modo sobrevivência.
+
 ## Documentação
 
 - [Visão e escopo do mod](docs/lore.md).

@@ -1,0 +1,68 @@
+{
+  "variants": {
+    "facing=north,half=lower,right=false": {
+      "model": "archery_plus:block/archery_workbench",
+      "y": 0
+    },
+    "facing=north,half=lower,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 0
+    },
+    "facing=north,half=upper,right=false": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 0
+    },
+    "facing=north,half=upper,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 0
+    },
+    "facing=east,half=lower,right=false": {
+      "model": "archery_plus:block/archery_workbench",
+      "y": 90
+    },
+    "facing=east,half=lower,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 90
+    },
+    "facing=east,half=upper,right=false": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 90
+    },
+    "facing=east,half=upper,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 90
+    },
+    "facing=south,half=lower,right=false": {
+      "model": "archery_plus:block/archery_workbench",
+      "y": 180
+    },
+    "facing=south,half=lower,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 180
+    },
+    "facing=south,half=upper,right=false": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 180
+    },
+    "facing=south,half=upper,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 180
+    },
+    "facing=west,half=lower,right=false": {
+      "model": "archery_plus:block/archery_workbench",
+      "y": 270
+    },
+    "facing=west,half=lower,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 270
+    },
+    "facing=west,half=upper,right=false": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 270
+    },
+    "facing=west,half=upper,right=true": {
+      "model": "archery_plus:block/archery_workbench_empty",
+      "y": 270
+    }
+  }
+}

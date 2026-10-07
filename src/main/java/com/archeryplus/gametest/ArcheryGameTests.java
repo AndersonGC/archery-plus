@@ -1,6 +1,7 @@
 package com.archeryplus.gametest;
 
 import com.archeryplus.ArcheryPlus;
+import com.archeryplus.block.ArcheryWorkbenchBlock;
 import com.archeryplus.control.WheelMath;
 import com.archeryplus.control.ZoomTransition;
 import com.archeryplus.combat.BowCombat;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -46,11 +48,18 @@ import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
@@ -77,6 +86,8 @@ public final class ArcheryGameTests {
         test("creative_inventory_transactions", ArcheryGameTests::creativeInventory);
         test("drag_and_potion_transfers", ArcheryGameTests::drag);
         test("effects_and_enchantments", ArcheryGameTests::effects);
+        test("workbench_placement", ArcheryGameTests::workbenchPlacement);
+        test("workbench_breaking", ArcheryGameTests::workbenchBreaking);
         for (String bow : List.of("vanilla", "recurve", "longbow")) {
             test(bow + "_shots", helper -> shots(helper, bow));
             for (String ammo : List.of("normal", "spectral", "potion")) test(bow + "_infinity_" + ammo, helper -> infinity(helper, bow, ammo));
@@ -510,6 +521,72 @@ public final class ArcheryGameTests {
         menu.quickMoveStack(player, 4); menu.quickMoveStack(player, 5);
         helper.assertTrue(equipment.contents().get(2).is(Items.TIPPED_ARROW) && equipment.contents().get(3).is(Items.TIPPED_ARROW)
                 && !ItemStack.isSameItemSameComponents(equipment.contents().get(2), equipment.contents().get(3)), "different potion stacks remain distinct");
+        helper.succeed();
+    }
+
+    private static boolean placeWorkbench(GameTestHelper helper, FakePlayer player, BlockPos base, Direction facing) {
+        var level = helper.getLevel();
+        for (BlockPos part : ArcheryWorkbenchBlock.positions(base, facing).subList(0, 2)) {
+            level.setBlock(part.below(), Blocks.STONE.defaultBlockState(), Block.UPDATE_ALL);
+        }
+        player.setYRot(facing.getOpposite().toYRot());
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModRegistries.ARCHERY_WORKBENCH_ITEM.get()));
+        var hit = new BlockHitResult(Vec3.atCenterOf(base.below()).add(0, 0.5, 0), Direction.UP, base.below(), false);
+        return ModRegistries.ARCHERY_WORKBENCH_ITEM.get().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, hit)).consumesAction();
+    }
+
+    private static void workbenchPlacement(GameTestHelper helper) {
+        var player = player(helper);
+        var level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(3, 2, 3));
+        for (Direction facing : Direction.Plane.HORIZONTAL) {
+            helper.assertTrue(placeWorkbench(helper, player, base, facing), "workbench item places " + facing);
+            var parts = ArcheryWorkbenchBlock.positions(base, facing);
+            for (int i = 0; i < parts.size(); i++) {
+                var state = level.getBlockState(parts.get(i));
+                helper.assertTrue(state.is(ModRegistries.ARCHERY_WORKBENCH.get())
+                        && state.getValue(ArcheryWorkbenchBlock.FACING) == facing
+                        && state.getValue(ArcheryWorkbenchBlock.RIGHT) == (i % 2 == 1)
+                        && state.getValue(ArcheryWorkbenchBlock.HALF) == (i < 2 ? DoubleBlockHalf.LOWER : DoubleBlockHalf.UPPER),
+                        "correct workbench cell " + i + " for " + facing);
+                helper.assertTrue(!state.getCollisionShape(level, parts.get(i)).isEmpty(), "each cell has collision");
+            }
+            helper.assertTrue(player.getMainHandItem().isEmpty(), "placement consumes exactly one item");
+            player.setGameMode(GameType.CREATIVE);
+            player.gameMode.destroyBlock(base);
+            player.setGameMode(GameType.SURVIVAL);
+            for (int i = 1; i < parts.size(); i++) {
+                BlockPos obstruction = parts.get(i);
+                level.setBlock(obstruction, Blocks.STONE.defaultBlockState(), Block.UPDATE_ALL);
+                helper.assertTrue(!placeWorkbench(helper, player, base, facing), "occupied cell must reject placement " + i);
+                helper.assertTrue(level.getBlockState(base).isAir() && level.getBlockState(obstruction).is(Blocks.STONE),
+                        "rejected placement preserves world");
+                helper.assertTrue(player.getMainHandItem().getCount() == 1, "rejected placement preserves item");
+                level.setBlock(obstruction, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            }
+        }
+        helper.succeed();
+    }
+
+    private static void workbenchBreaking(GameTestHelper helper) {
+        var player = player(helper);
+        var level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(3, 2, 3));
+        for (GameType mode : List.of(GameType.SURVIVAL, GameType.CREATIVE)) {
+            player.setGameMode(mode);
+            for (int i = 0; i < 4; i++) {
+                helper.assertTrue(placeWorkbench(helper, player, base, Direction.NORTH), "place bench before breaking");
+                var parts = ArcheryWorkbenchBlock.positions(base, Direction.NORTH);
+                player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                helper.assertTrue(player.gameMode.destroyBlock(parts.get(i)), "break any workbench cell");
+                for (BlockPos part : parts) helper.assertTrue(level.getBlockState(part).isAir(), "whole bench removed");
+                var drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(base).inflate(4),
+                        e -> e.getItem().is(ModRegistries.ARCHERY_WORKBENCH_ITEM.get()));
+                int count = drops.stream().mapToInt(e -> e.getItem().getCount()).sum();
+                helper.assertTrue(count == (mode == GameType.CREATIVE ? 0 : 1), "one survival drop, no creative drops: " + count);
+                drops.forEach(Entity::discard);
+            }
+        }
         helper.succeed();
     }
 

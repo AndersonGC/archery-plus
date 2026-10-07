@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:block",
+  "pools": [{
+    "rolls": 1,
+    "entries": [{"type": "minecraft:item", "name": "archery_plus:archery_workbench"}],
+    "conditions": [
+      {"condition": "minecraft:block_state_property", "block": "archery_plus:archery_workbench", "properties": {"half": "lower", "right": "false"}},
+      {"condition": "minecraft:survives_explosion"}
+    ]
+  }]
+}
